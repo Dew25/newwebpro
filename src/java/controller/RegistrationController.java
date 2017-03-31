@@ -5,13 +5,17 @@
  */
 package controller;
 
+import entity.User;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import session.UserFacade;
 
 /**
  *
@@ -19,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "RegistrationController", urlPatterns = {"/registration","/addUser"})
 public class RegistrationController extends HttpServlet {
-
+    @EJB UserFacade userFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,6 +41,12 @@ public class RegistrationController extends HttpServlet {
             request.getRequestDispatcher(userPath+".jsp").forward(request, response);
         }else if("/addUser".equals(userPath)){
             //Получим из формы данные и добавим их в базу
+            String name = request.getParameter("name");
+            String surname = request.getParameter("surname");
+            String login = request.getParameter("login");
+            String password = request.getParameter("password");
+            User user = new User(name, surname, login, password);
+            userFacade.create(user);
         }
     }
 
