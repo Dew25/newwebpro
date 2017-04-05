@@ -4,6 +4,7 @@
     Author     : Melnikov
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,5 +14,11 @@
     </head>
     <body>
         <h1>Это страница администратора!</h1>
+        <p><a href="newArticle">Добавть новую статью</a></p>
+        
+        <h2>Пользователи:</h2>
+        <c:forEach var="user" items="${users}">
+            <p>${user.name} ${user.surname}, логин: ${user.login}</p>
+        </c:forEach>
     </body>
 </html>

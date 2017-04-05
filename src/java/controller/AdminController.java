@@ -5,20 +5,29 @@
  */
 package controller;
 
+import entity.Article;
+import entity.User;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import session.ArticleFacade;
+import session.UserFacade;
+
 
 /**
  *
  * @author Melnikov
  */
-@WebServlet(name = "AdminController", urlPatterns = {"/admin"})
+@WebServlet(name = "AdminController", urlPatterns = {"/admin","/newArticle","/addArticle"})
 public class AdminController extends HttpServlet {
-
+@EJB UserFacade userFacade;
+@EJB ArticleFacade articleFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,9 +40,24 @@ public class AdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         String userPath = request.getServletPath();
         if("/admin".equals(userPath)){
+            List<User> users = userFacade.findAll();
+            request.setAttribute("users", users);
             request.getRequestDispatcher("/WEB-INF"+userPath+".jsp").forward(request, response);
+        }else if("/newArticle".equals(userPath)){
+            request.getRequestDispatcher("/WEB-INF"+userPath+".jsp").forward(request, response);
+        }else if("/addArticle".equals(userPath)){
+            String title = request.getParameter("title");
+            String text = request.getParameter("text");
+            String author = request.getParameter("author");
+            Date date = new Date();
+            Article article = new Article(title, text, author, date);
+            articleFacade.create(article);
+            List<Article> articles = articleFacade.findAll();
+            request.setAttribute("articles", articles);
+            request.getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
         }
     }
 

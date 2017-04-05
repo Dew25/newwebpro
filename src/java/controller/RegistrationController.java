@@ -46,7 +46,17 @@ public class RegistrationController extends HttpServlet {
             String login = request.getParameter("login");
             String password = request.getParameter("password");
             User user = new User(name, surname, login, password);
-            userFacade.create(user);
+            try {
+               userFacade.create(user); 
+            } catch (Exception e) {
+                String info = "Регистрация не прошла. Error: "+ e.getMessage();
+                request.setAttribute("info", info);
+                request.getRequestDispatcher("registration.jsp").forward(request, response);
+            }
+            
+            String info = "Регистрация прошла успешно";
+            request.setAttribute("info", info);
+            request.getRequestDispatcher("registration.jsp").forward(request, response);
         }
     }
 

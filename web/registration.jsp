@@ -13,6 +13,7 @@
     </head>
     <body>
         <h1>Зарегистрируйтесь!</h1>
+        <p>${info}</p>
         <form action="addUser" method="POST">
             <input type="text" name="name" placeholder="Имя пользователя"><br>
             <input type="text" name="surname" placeholder="Фамилия"><br>
